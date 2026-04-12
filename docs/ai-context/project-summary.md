@@ -34,7 +34,7 @@
 | ドメイン | 説明 | 主なモデル |
 |---|---|---|
 | users | ユーザー管理・認証 | User |
-| logs | 日次ログ管理（音声日記・YouTube履歴の集約） | DailyLog, VoiceDiary, WatchHistory |
+| logs | 日次ログ管理（音声日記・YouTube行動シグナルの集約） | DailyLog, VoiceDiary, YouTubeSignal, YouTubeVideoCatalog |
 | analysis | AI 定期分析・レポート管理 | AnalysisReport |
 | integrations | 外部サービス連携（YouTube OAuth） | YouTubeToken |
 
