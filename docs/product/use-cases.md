@@ -68,37 +68,66 @@
 
 ---
 
-### UC-002: YouTube 視聴履歴を同期する
+### UC-002: YouTube 行動シグナルを同期する
 
 **Actor**: ユーザー、システム
-**前提条件**: ログイン済み。YouTube OAuth2 連携済み
+**前提条件**: ログイン済み
 **関連要件**: F-002
 
+> **注**: YouTube Data API v3 では「完全な視聴履歴」の安定取得は公式に提供されていない。
+> MVP では取得可能な行動シグナル（高評価・プレイリスト・購読・アクティビティ）を収集し、
+> 動画メタデータを付与して分析に活用する。
+
 #### 基本フロー
-1. ユーザーが Settings 画面で YouTube 連携を開始（OAuth2 認可フロー）
-2. Google の認可画面でユーザーが許可する
-3. システムがアクセストークン・リフレッシュトークンを YouTubeToken に保存する
-4. システムが YouTube Data API v3 で視聴履歴を取得する
-5. WatchHistory レコードを保存（重複は除外）し、DailyLog に紐づける
-6. ユーザーに同期完了を通知する
+1. ユーザーが Settings 画面で「YouTube 連携」ボタンをタップ
+2. Google の OAuth2 認可画面でユーザーが `youtube.readonly` スコープを許可する
+3. システムがアクセストークン・リフレッシュトークンを YouTubeSignal に保存する
+4. システムが以下の順で YouTube Data API v3 を呼び出す（バックグラウンドジョブ）:
+   - `activities.list(mine=true)` — 直近のアクティビティ（高評価、プレイリスト追加等）
+   - `videos.list(myRating=like)` — 高評価動画の一覧
+   - `playlists.list(mine=true)` + `playlistItems.list` — 自分のプレイリスト内容
+   - `subscriptions.list(mine=true)` — 購読チャンネル一覧
+   - `videos.list(id=...)` — 上記で得た動画IDのメタデータ補完（タイトル・カテゴリ・タグ等）
+5. 各シグナルを YouTubeSignal テーブルに保存（重複除外）し、DailyLog に紐づける
+6. ユーザーに同期完了件数を通知する
+
+#### 取得シグナルの種類
+
+| source_type | 取得元エンドポイント | 意味 |
+|---|---|---|
+| `activity_like` | `activities.list` | アクティビティ上の高評価イベント |
+| `liked_video` | `videos.list(myRating=like)` | 明示的な高評価動画 |
+| `playlist_item` | `playlistItems.list` | 自分のプレイリストに追加した動画 |
+| `subscription` | `subscriptions.list` | 購読中チャンネル（初回取得のみ） |
+
+#### 動画メタデータ（補完項目）
+
+| フィールド | 取得元 | 分析への活用 |
+|---|---|---|
+| title | `videos.list` | キーワード・テーマ抽出 |
+| channelTitle | `videos.list` | チャンネル軸の傾向把握 |
+| categoryId | `videos.list` | ジャンル分類 |
+| tags | `videos.list` | トピッククラスタリング |
+| topicCategories | `videos.list` | Wikipedia カテゴリベースのテーマ推定 |
+| duration | `videos.list` | 短尺 / 長尺の習慣パターン |
 
 #### 入力
 | 項目 | 型 | 必須 | 説明 |
 |---|---|---|---|
 | OAuth2 authorization code | string | 必須 | Google から返却されるコード |
-| 取得件数（上限） | integer | 任意 | デフォルト: 最新50件 |
 
 #### 出力
 | 項目 | 型 | 説明 |
 |---|---|---|
-| synced_count | integer | 新規同期された視聴履歴数 |
-| last_synced_at | datetime | 同期日時 |
+| synced_count | integer | 新規保存されたシグナル件数 |
+| last_synced_at | datetime | 同期完了日時 |
 
 #### 業務ルール
-- 同じ動画 ID・視聴日時の組み合わせは重複保存しない
+- 同じ `source_type` + `video_id` + `occurred_at` の組み合わせは重複保存しない
 - アクセストークンが期限切れの場合はリフレッシュトークンで自動更新する
-- 視聴履歴は動画ID・タイトル・チャンネル名・視聴日時を保存する
-- 同期はバックグラウンドジョブで実行する
+- 完全な視聴履歴の再現は行わない（API 制約のため）
+- 同期はバックグラウンドジョブ（Laravel Queue）で実行する
+- API クォータ消費量の目安: 1回の同期で約 50〜150 ユニット（上限 10,000/日）
 
 #### エラーケース
 | ケース | HTTPステータス | メッセージ |

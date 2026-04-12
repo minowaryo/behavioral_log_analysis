@@ -9,7 +9,8 @@
 |---|---|---|
 | DailyLog | 1日分のログ集約エンティティ。VoiceDiary と WatchHistory をまとめて管理する | 日次ログ |
 | VoiceDiary | 音声日記エントリ。音声ファイル・文字起こしテキスト・日付を保持する | 音声日記 |
-| WatchHistory | YouTube 視聴履歴エントリ。動画ID・タイトル・チャンネル・視聴日時を保持する | 視聴履歴 |
+| YouTubeSignal | YouTube 行動シグナルエンティティ。高評価・プレイリスト追加・購読等のイベントを `source_type` で区別して保持する。完全な視聴履歴ではなく、API で安定取得できる行動データのみを対象とする | YouTube行動シグナル |
+| YouTubeVideoCatalog | `videos.list` で取得した動画メタデータのマスタ。title / channel_title / category_id / tags / topic_categories / duration 等を保持し、シグナルに意味を付与するために使う | 動画カタログ |
 | AnalysisReport | 5観点での AI 分析結果。分析タイプ・期間・Claude の出力テキストを保持する | 分析レポート |
 | YouTubeToken | Google OAuth2 トークン（アクセストークン・リフレッシュトークン）を保持するエンティティ | - |
 | Retrospective | 分析観点①：自動回顧録。蓄積ログから振り返りレポートを生成する | 自動回顧録 |
