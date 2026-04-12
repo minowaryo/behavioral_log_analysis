@@ -7,7 +7,7 @@
 
 | 用語 | 説明 | 別名 |
 |---|---|---|
-| DailyLog | 1日分のログ集約エンティティ。VoiceDiary と WatchHistory をまとめて管理する | 日次ログ |
+| DailyLog | 1日分のログ集約エンティティ。VoiceDiary と YouTubeSignal をまとめて管理する | 日次ログ |
 | VoiceDiary | 音声日記エントリ。音声ファイル・文字起こしテキスト・日付を保持する | 音声日記 |
 | YouTubeSignal | YouTube 行動シグナルエンティティ。高評価・プレイリスト追加・購読等のイベントを `source_type` で区別して保持する。完全な視聴履歴ではなく、API で安定取得できる行動データのみを対象とする | YouTube行動シグナル |
 | YouTubeVideoCatalog | `videos.list` で取得した動画メタデータのマスタ。title / channel_title / category_id / tags / topic_categories / duration 等を保持し、シグナルに意味を付与するために使う | 動画カタログ |
