@@ -16,7 +16,7 @@
 | `app/Policies/` | 認可ルール | 必ずGate経由で呼ぶ |
 | `app/Events/` | ドメインイベント | 過去形の名前 |
 | `app/Listeners/` | イベントハンドラ | 重い処理はQueueに |
-| `app/Jobs/ScheduledAnalysisJob.php` | 週次・2ヶ月ごとの自動分析を実行するジョブ | Horizon経由で実行 |
+| `app/Jobs/ScheduledAnalysisJob.php` | 週次・月次の自動分析を実行するジョブ | Horizon経由で実行 |
 
 ## Frontend (Vue.js + Inertia.js + Tailwind CSS)
 

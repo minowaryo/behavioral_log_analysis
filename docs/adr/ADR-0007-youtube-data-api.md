@@ -85,5 +85,5 @@ YouTube Data API v3 の公式ドキュメントを調査した結果、以下が
   - `video_id`, `title`, `channel_title`, `category_id`, `tags`, `duration`, `topic_categories`, `published_at`
 - Google Cloud Console でプロジェクト作成・OAuth2 クライアント設定が必要
 - クライアント ID / シークレットは `.env` で管理（ドキュメントには記載しない）
-- ユーザーが YouTube との連携を解除した場合はトークンを即座に削除する
+- ユーザーが YouTube との連携を解除した場合は YouTubeToken（アクセストークン・リフレッシュトークン）のみ即座に削除する。取得済みの YouTubeSignal データは分析継続のために保持する
 - **将来対応**: Google Takeout インポートによる視聴履歴の取り込みは別 ADR で検討する

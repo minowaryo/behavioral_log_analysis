@@ -34,7 +34,7 @@
 | Page コンポーネント | Inertia のルートに対応する `Pages/` 配下の `.vue` ファイル。Controller の return で指定される |
 | Whisper API | OpenAI が提供する音声文字起こし API。音声ファイルを送信してテキストを返す |
 | YouTube Data API | Google が提供する YouTube の動画・履歴データ取得 API（v3）。OAuth2 認証が必要 |
-| ScheduledAnalysisJob | 週次・2ヶ月ごとに自動で分析を実行する Laravel Job |
+| ScheduledAnalysisJob | 週次・月次で自動で分析を実行する Laravel Job |
 
 ## 略語
 
@@ -51,8 +51,8 @@
 
 | タイプ値 | 対応観点 | 実行頻度 |
 |---|---|---|
-| `retrospective` | 自動回顧録 | 週次・2ヶ月ごと |
-| `learning_filter` | 学習フィルター | 週次・2ヶ月ごと |
+| `retrospective` | 自動回顧録 | 週次・月次 |
+| `learning_filter` | 学習フィルター | 週次・月次 |
 | `mental_trigger` | メンタルトリガー検知 | 週次 |
-| `ai_coaching` | AI コーチング | 2ヶ月ごと |
-| `business_idea` | ビジネスアイデア提案 | 2ヶ月ごと |
+| `ai_coaching` | AI コーチング | 月次 |
+| `business_idea` | ビジネスアイデア提案 | 月次 |
