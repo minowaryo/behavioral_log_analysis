@@ -1,0 +1,59 @@
+# 40-security.md — セキュリティルール
+
+## Secrets管理（最重要）
+
+### 絶対禁止
+- APIキー・パスワードをコードにハードコード
+- `.env` 実値をコミット・チャット・AIに貼り付け
+- 本番資格情報をAIプロンプトに含める
+- `secrets.*` 系ファイルをGitにコミット
+
+### 正しい管理方法
+- シークレットは `.env` のみ（`.env.example` にキー名だけ記載）
+- 本番シークレットはSecret Manager（AWS Secrets Manager等）を使う
+- AIに渡すコンテキストにはダミー値を使う
+
+## 認証・認可
+
+- 認証: Laravel Sanctum / Passport を使う
+- 認可: **Policy / Gate を必ず使う**（直接ロールチェック禁止）
+- セッション: HttpOnly + Secure cookie を設定
+- CSRF: `VerifyCsrfToken` ミドルウェアを必ず有効にする
+
+## 入力バリデーション
+
+- ユーザー入力は必ずFormRequestでバリデーション
+- SQLインジェクション対策: Eloquentを使う（生SQL禁止）
+- XSS対策: Bladeの `{{ }}` を使う（`{!! !!}` は最小限）
+- ファイルアップロード: MIMEタイプ・サイズ・拡張子を検証
+
+## ログ・監査
+
+### ログに出してはいけないもの
+- パスワード
+- APIキー・トークン
+- クレジットカード番号
+- 個人識別情報（PII）
+
+### ログに出すべきもの
+- ユーザーID（個人を特定できない形で）
+- 操作の種類・タイムスタンプ
+- エラーの種類・スタックトレース（本番では最小限）
+
+## 依存パッケージ
+
+- `composer audit` を定期実行して脆弱性チェック
+- メジャーアップデートはテスト環境で検証してからマージ
+- 使っていないパッケージは削除する
+
+## OWASP Top 10 対応チェック
+
+- [ ] Injection（SQLi/XSS）
+- [ ] Broken Authentication
+- [ ] Sensitive Data Exposure
+- [ ] XXE
+- [ ] Broken Access Control
+- [ ] Security Misconfiguration
+- [ ] Insecure Deserialization
+- [ ] Using Components with Known Vulnerabilities
+- [ ] Insufficient Logging
