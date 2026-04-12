@@ -5,93 +5,116 @@
 
 ---
 
-## カラーパレット
+## デザイン方針
 
-| 用途 | カラーコード | 備考 |
+### モバイルファースト
+
+- **主要利用環境**: スマートフォンブラウザ（iOS Safari / Android Chrome）
+- ネイティブアプリは作らない。ブラウザ上でスマートフォンに最適化する
+- デスクトップ（PC）でも崩れずに表示できること（レスポンシブ対応）
+
+### Tailwind CSS によるブレークポイント
+
+| ブレークポイント | 対象 | 最小幅 |
 |---|---|---|
-| Primary | `#[COLOR]` | メインアクション・ボタン |
-| Secondary | `#[COLOR]` | サブアクション |
-| Danger | `#[COLOR]` | 削除・エラー |
-| Warning | `#[COLOR]` | 注意・警告 |
-| Success | `#[COLOR]` | 成功・完了 |
-| Background | `#[COLOR]` | ページ背景 |
-| Surface | `#[COLOR]` | カード・パネル背景 |
-| Text primary | `#[COLOR]` | 本文 |
-| Text secondary | `#[COLOR]` | 補足テキスト |
+| デフォルト（無印） | スマートフォン（縦） | — |
+| `sm:` | スマートフォン（横）・小型タブレット | 640px |
+| `md:` | タブレット | 768px |
+| `lg:` | デスクトップ | 1024px |
+
+**原則**: スタイルは常にモバイル（デフォルト）から書き始め、`md:` や `lg:` で上書きする。
+
+---
+
+## レイアウト
+
+### 基本レイアウト（モバイル）
+
+- 1カラム縦スクロール
+- ボトムナビゲーション（タブバー）で主要画面を切り替える
+- ヘッダーはシンプル（タイトル＋右上にアイコンメニュー）
+
+### ボトムナビゲーション（タブ構成）
+
+| タブ | アイコン | 遷移先 |
+|---|---|---|
+| ホーム | 🏠 | Dashboard（ログ概要） |
+| 日記 | 🎤 | Diary（録音・一覧） |
+| 分析 | 📊 | Analysis（レポート閲覧） |
+| 設定 | ⚙️ | Settings（YouTube連携・アカウント） |
+
+### デスクトップ（`lg:`）
+
+- サイドバーナビゲーション（左固定）に切り替える
+- コンテンツエリアは中央配置（最大幅 `max-w-3xl` 程度）
+
+---
+
+## 音声録音 UI
+
+### 録音ボタン
+
+- 中央に大きな円形ボタン（タップしやすいサイズ: 80px 以上）
+- 状態:
+  - **待機中**: グレー、マイクアイコン
+  - **録音中**: 赤、点滅アニメーション、停止アイコン
+  - **処理中（Whisper 送信）**: ローディングスピナー
+  - **完了**: グリーン、チェックアイコン
+
+### 録音フロー（1画面完結）
+
+1. 録音ボタンをタップ → 録音開始
+2. もう一度タップ → 録音停止 → Whisper API に送信
+3. 文字起こし結果がその場に表示される
+4. 保存ボタンで確定（編集可能）
+
+---
+
+## カラーパレット（Tailwind CSS カスタム設定）
+
+| 役割 | カラー（Tailwind） | 用途 |
+|---|---|---|
+| Primary | `indigo-600` | ボタン・アクセント |
+| Danger | `red-500` | 録音中・削除 |
+| Success | `green-500` | 完了・保存済み |
+| Background | `gray-50` | 全体背景 |
+| Card | `white` | カード・パネル |
+| Text Primary | `gray-900` | 本文 |
+| Text Muted | `gray-500` | サブテキスト |
 
 ---
 
 ## タイポグラフィ
 
-| 用途 | フォント | サイズ | ウェイト |
-|---|---|---|---|
-| 見出し H1 | [FONT] | [SIZE] | Bold |
-| 見出し H2 | [FONT] | [SIZE] | SemiBold |
-| 本文 | [FONT] | [SIZE] | Regular |
-| ラベル | [FONT] | [SIZE] | Medium |
-| キャプション | [FONT] | [SIZE] | Regular |
-
----
-
-## レイアウト原則
-
-- **グリッド**: [例: 12カラム / 8px基準グリッド]
-- **ブレークポイント**:
-  - Mobile: `< 768px`
-  - Tablet: `768px〜1024px`
-  - Desktop: `> 1024px`
-- **コンテナ最大幅**: `[例: 1280px]`
-- **標準余白**: `[例: 16px / 24px / 32px]`
+- フォント: システムデフォルト（`font-sans`）
+- ベースフォントサイズ: `text-base`（16px）
+- 見出し: `text-xl font-bold`（ページタイトル）、`text-lg font-semibold`（セクション）
+- 小テキスト: `text-sm text-gray-500`（日付・メタ情報）
 
 ---
 
 ## コンポーネント方針
 
-### ボタン
-- Primary: メインアクション（1画面に1つまで）
-- Secondary: サブアクション
-- Danger: 削除・取り消し（確認ダイアログを必ず挟む）
-- Ghost: ナビゲーション系
-
-### モーダル
-- 利用シーン: 確認ダイアログ・簡易フォーム入力
-- 全画面遷移が必要な複雑操作にはモーダルを使わない
-- モーダル内にモーダルを重ねない
-
-### テーブル
-- ページネーション: [例: 20件/ページ]
-- ソート可能カラムには矢印アイコンを表示
-- 空状態（0件）には必ずメッセージを表示
-
-### フォーム
-- バリデーションエラーはフィールド直下にインライン表示
-- 必須項目には `*` マークを付ける
-- Submit後の成功/失敗はトースト通知で伝える
+| コンポーネント | 配置場所 | 備考 |
+|---|---|---|
+| BottomNavigation | `Components/Layout/BottomNavigation.vue` | モバイルのみ表示（`lg:hidden`） |
+| SidebarNavigation | `Components/Layout/SidebarNavigation.vue` | デスクトップのみ表示（`hidden lg:block`） |
+| RecordButton | `Components/Diary/RecordButton.vue` | 録音ボタン・状態管理 |
+| AnalysisCard | `Components/Analysis/AnalysisCard.vue` | 分析レポートカード（タイプ別） |
+| DailyLogCard | `Components/Diary/DailyLogCard.vue` | 日次ログ一覧アイテム |
 
 ---
 
-## アイコン
+## アクセシビリティ
 
-- ライブラリ: [例: Heroicons / FontAwesome / Material Icons]
-- サイズ規則: [例: 16px（インライン） / 20px（ボタン） / 24px（ナビ）]
+- タップターゲットは最低 44×44px 以上
+- カラーコントラスト比は WCAG AA 準拠（4.5:1 以上）
+- `aria-label` を録音ボタン等のアイコンのみのボタンに必ず付ける
 
 ---
 
-## モック作成ルール（AI向け）
+## 注意事項
 
-AIがモックを生成する際の指示：
-
-1. このファイル（`ui-guidelines.md`）を読んでからHTMLを生成する
-2. 対応するUC番号をファイル名に含める（例: `screen-UC006-filter.html`）
-3. `docs/product/mockups/` に配置する
-4. `docs/product/mockups/README.md` の画面一覧に追記する
-5. 実データは使わず、ダミーデータで描画する
-6. インタラクションは不要（静的HTMLで可）
-
-### モック生成プロンプトテンプレート
-
-```
-docs/product/use-cases.md の [UC-XXX] と docs/product/ui-guidelines.md を読み、
-[画面名]のHTMLモックを docs/product/mockups/screen-[UC-XXX]-[screen-name].html として生成してください。
-実データは不要です。ダミーデータを使用してください。
-```
+- iOS Safari では MediaRecorder API の対応状況を事前確認すること
+  - iOS 14.3 以降で対応（WebM は非対応のため MP4 / AAC を使う）
+- スマートフォンでは `fixed bottom-0` のボトムナビが safe-area に干渉する場合があるため `pb-safe` 等で対処する

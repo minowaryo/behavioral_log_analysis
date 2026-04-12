@@ -51,6 +51,9 @@ php artisan migrate:status
 # 開発サーバー起動
 php artisan serve
 
+# フロントエンド開発サーバー起動（別ターミナル）
+npm run dev
+
 # キャッシュクリア
 php artisan cache:clear
 php artisan config:clear
@@ -62,6 +65,9 @@ php artisan queue:work
 
 # スケジューラ起動（開発）
 php artisan schedule:work
+
+# 分析ジョブを手動実行（デバッグ用）
+php artisan schedule:run
 ```
 
 ## コード生成（Artisan）
@@ -71,16 +77,21 @@ php artisan schedule:work
 php artisan make:controller UserController --resource
 
 # モデル + マイグレーション + Factory + Seeder
-php artisan make:model User -mfs
+php artisan make:model DailyLog -mfs
 
 # FormRequest
-php artisan make:request StoreUserRequest
+php artisan make:request StoreVoiceDiaryRequest
 
 # Policy
-php artisan make:policy UserPolicy --model=User
+php artisan make:policy DailyLogPolicy --model=DailyLog
+
+# Job（分析スケジューラ等）
+php artisan make:job ScheduledAnalysisJob
 
 # Action / Service（カスタム）
-php artisan make:class Actions/RegisterUserAction
+php artisan make:class Services/VoiceDiaryService
+php artisan make:class Services/YouTubeService
+php artisan make:class Services/AnalysisService
 ```
 
 ## Composer
@@ -97,4 +108,20 @@ composer audit
 
 # オートロード再生成
 composer dump-autoload
+```
+
+## フロントエンド（npm）
+
+```bash
+# 依存関係インストール
+npm install
+
+# 開発ビルド（watch）
+npm run dev
+
+# 本番ビルド
+npm run build
+
+# Lint チェック
+npm run lint
 ```

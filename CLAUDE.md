@@ -2,11 +2,11 @@
 
 ## Project
 
-- **Project name**: [PROJECT_NAME]
-- **Stack**: [例: Laravel + MySQL]
-- **Type**: [例: Monolith web application / API / etc.]
-- **Main domains**: [例: 在庫管理 / 受注処理 / etc.]
-- **Repository**: [GitLab/GitHub URL]
+- **Project name**: behavioral_log_analysis
+- **Stack**: Laravel 11 + MySQL 8.0 + Vue.js 3 + Inertia.js + Tailwind CSS
+- **Type**: Monolith web application（モバイルファーストのレスポンシブ Web）
+- **Main domains**: 行動ログ管理（音声日記・YouTube視聴履歴）/ AI分析（6観点） / 外部連携（YouTube OAuth / Whisper / Claude API）
+- **Repository**: https://github.com/minowaryo/behavioral_log_analysis.git
 
 ---
 
