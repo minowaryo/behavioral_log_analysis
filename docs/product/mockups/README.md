@@ -17,7 +17,10 @@ screen-[UC番号]-[画面名（英小文字ハイフン区切り）].[html|png|m
 
 | ファイル名 | 対応UC | 画面名 | 作成日 | ビジネスレビュー | フィードバック反映 |
 |---|---|---|---|---|---|
-| *(追加してください)* | | | | | |
+| screen-UC001-diary.md | UC-001 | Diary 画面（録音・日記） | 2026-04-18 | 未レビュー | - |
+| screen-UC002-settings-youtube.md | UC-002 | Settings 画面（YouTube 連携） | 2026-04-18 | 未レビュー | - |
+| screen-UC003-daily-log.md | UC-003 | Dashboard / 日次ログ詳細 | 2026-04-18 | 未レビュー | - |
+| screen-UC004-UC005-analysis.md | UC-004, UC-005, UC-007 | Analysis 画面（週次・月次レポート） | 2026-04-18 | 未レビュー | - |
 
 ## 運用ルール
 

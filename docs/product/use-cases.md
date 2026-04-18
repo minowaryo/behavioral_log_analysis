@@ -194,6 +194,20 @@
 4. 分析結果を AnalysisReport に保存
 5. ユーザーが次回 Analysis 画面を開いたときにレポートが表示される
 
+#### 入力
+| 項目 | 型 | 説明 |
+|---|---|---|
+| （なし） | - | スケジューラが自動実行。ユーザー操作は不要 |
+
+#### 出力
+| 項目 | 型 | 説明 |
+|---|---|---|
+| analysis_reports | AnalysisReport[] | 3観点（retrospective / learning_filter / mental_trigger）の分析結果。各レコードに analysis_type・period_start・period_end・content を保持 |
+
+#### 状態変更
+- AnalysisReport が最大3件（観点ごと）新規保存される
+- 既存レポートは上書きせず、新規レコードとして追加する
+
 #### 業務ルール
 - 分析対象期間: 実行日の前7日間
 - ログが3日分未満の場合は分析をスキップする（データ不足）
@@ -224,6 +238,20 @@
    - ビジネスアイデア提案（business_idea）
 4. 各観点の分析結果を AnalysisReport に保存
 5. Analysis 画面に「月次レポート」として表示される
+
+#### 入力
+| 項目 | 型 | 説明 |
+|---|---|---|
+| （なし） | - | スケジューラが自動実行。ユーザー操作は不要 |
+
+#### 出力
+| 項目 | 型 | 説明 |
+|---|---|---|
+| analysis_reports | AnalysisReport[] | 5観点（retrospective / learning_filter / mental_trigger / ai_coaching / business_idea）の分析結果 |
+
+#### 状態変更
+- AnalysisReport が最大5件（観点ごと）新規保存される
+- Analysis 画面の「月次レポート」タブに新しいレポートが追加表示される
 
 #### 業務ルール
 - YouTube 行動シグナルから推定した興味カテゴリ・日記の関心事・学習傾向の3軸を掛け合わせてビジネスアイデアを生成する
@@ -270,6 +298,20 @@
 3. 各アイデアは「タイトル」「概要」「実現ヒント」の形式で出力
 4. AnalysisReport（type: business_idea）に保存
 5. Analysis 画面の「アイデア」タブに表示
+
+#### 入力
+| 項目 | 型 | 説明 |
+|---|---|---|
+| （なし） | - | UC-005（月次分析）の中で自動実行される |
+
+#### 出力
+| 項目 | 型 | 説明 |
+|---|---|---|
+| analysis_report | AnalysisReport | type: business_idea。content は JSON 配列形式で `[{title, summary, hint}]` の3〜5件を含む |
+
+#### 状態変更
+- AnalysisReport（type: business_idea）が1件新規保存される
+- Analysis 画面の「アイデア」タブに新しいアイデア一覧が表示される
 
 #### 業務ルール
 - アイデアは実在のビジネス・プロジェクトではなく「可能性の提示」であることを UI で明示する
