@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Analysis — 分析レポート</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 min-h-screen">
+
+  <div class="max-w-sm mx-auto bg-white min-h-screen flex flex-col shadow-xl">
+
+    <!-- ヘッダー -->
+    <header class="px-4 py-3 border-b border-gray-100 bg-white sticky top-0 z-10">
+      <h1 class="text-base font-semibold text-gray-900 mb-3">Analysis</h1>
+      <!-- タブ -->
+      <div class="flex bg-gray-100 rounded-xl p-1">
+        <button id="tab-weekly" onclick="setTab('weekly')"
+          class="flex-1 py-1.5 text-sm font-semibold rounded-lg transition-all bg-white text-gray-900 shadow-sm">
+          週次
+        </button>
+        <button id="tab-monthly" onclick="setTab('monthly')"
+          class="flex-1 py-1.5 text-sm font-medium rounded-lg transition-all text-gray-500">
+          月次
+        </button>
+      </div>
+    </header>
+
+    <!-- ===== 週次タブ ===== -->
+    <div id="pane-weekly" class="flex-1 overflow-y-auto px-4 py-4 space-y-4">
+
+      <!-- 期間バッジ -->
+      <div class="flex items-center justify-between">
+        <div class="inline-flex items-center gap-2 bg-indigo-50 rounded-lg px-3 py-1.5">
+          <svg class="w-3.5 h-3.5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+          </svg>
+          <span class="text-xs text-indigo-600 font-medium">2026年4月13日 〜 4月19日</span>
+        </div>
+        <span class="text-xs text-gray-400">自動生成</span>
+      </div>
+
+      <!-- 自動回顧録 -->
+      <div class="rounded-2xl border border-gray-100 overflow-hidden">
+        <div class="flex items-center gap-2 px-4 py-3 bg-purple-50 border-b border-purple-100">
+          <span class="text-lg">📖</span>
+          <h2 class="text-sm font-semibold text-purple-800">自動回顧録</h2>
+        </div>
+        <div class="px-4 py-3">
+          <p class="text-sm text-gray-700 leading-relaxed">
+            今週は機械学習・AI 分野へのアクセスが顕著に増加しました。特に Transformer アーキテクチャや RAG システムに関連する動画を複数高評価しており、深い学習欲求が感じられます。音声日記でも「頭の中でつながった」という表現が登場しており、知識の統合フェーズに入っている可能性があります。
+          </p>
+          <button onclick="toggleExpand(this)" class="mt-2 text-xs text-indigo-500 font-medium">もっと見る ↓</button>
+          <div class="hidden mt-3 pt-3 border-t border-gray-100">
+            <p class="text-sm text-gray-600 leading-relaxed">水曜日は記録がゼロでしたが、木・金・土と回復しており、ログの連続性は維持されています。来週以降もこのペースを維持することが成長の鍵になりそうです。</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 学習フィルター -->
+      <div class="rounded-2xl border border-gray-100 overflow-hidden">
+        <div class="flex items-center gap-2 px-4 py-3 bg-blue-50 border-b border-blue-100">
+          <span class="text-lg">🎓</span>
+          <h2 class="text-sm font-semibold text-blue-800">学習フィルター</h2>
+        </div>
+        <div class="px-4 py-3">
+          <!-- 興味タグ -->
+          <div class="flex flex-wrap gap-2 mb-3">
+            <span class="px-2.5 py-1 bg-blue-100 text-blue-700 text-xs font-medium rounded-full">機械学習 / AI</span>
+            <span class="px-2.5 py-1 bg-blue-100 text-blue-700 text-xs font-medium rounded-full">Transformer</span>
+            <span class="px-2.5 py-1 bg-blue-100 text-blue-700 text-xs font-medium rounded-full">Python</span>
+            <span class="px-2.5 py-1 bg-gray-100 text-gray-600 text-xs font-medium rounded-full">財務・会計</span>
+            <span class="px-2.5 py-1 bg-gray-100 text-gray-600 text-xs font-medium rounded-full">起業</span>
+          </div>
+          <p class="text-sm text-gray-700 leading-relaxed">
+            今週の行動シグナルから、<span class="font-semibold text-blue-700">AI/ML（技術深耕）</span>と<span class="font-semibold text-gray-700">ビジネス・財務</span>の2軸が確認されます。前週より技術系の比重が増加しています。
+          </p>
+        </div>
+      </div>
+
+      <!-- メンタルトリガー検知 -->
+      <div class="rounded-2xl border border-gray-100 overflow-hidden">
+        <div class="flex items-center gap-2 px-4 py-3 bg-amber-50 border-b border-amber-100">
+          <span class="text-lg">💭</span>
+          <h2 class="text-sm font-semibold text-amber-800">メンタルトリガー検知</h2>
+        </div>
+        <div class="px-4 py-3">
+          <div class="flex items-start gap-2 bg-amber-50 rounded-xl px-3 py-2.5 mb-3 border border-amber-100">
+            <svg class="w-4 h-4 text-amber-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+            </svg>
+            <p class="text-xs text-amber-700">水曜日にログ記録が途絶えています。ストレスや疲労のサインである可能性があります。</p>
+          </div>
+          <p class="text-sm text-gray-700 leading-relaxed">
+            全体的には安定したポジティブなトーンが維持されています。「つながった」「面白い」等の前向きな表現が優勢です。
+          </p>
+        </div>
+      </div>
+
+      <!-- 次回レポート予告 -->
+      <div class="rounded-xl bg-gray-50 border border-gray-100 px-4 py-3 text-center">
+        <p class="text-xs text-gray-400">次回週次レポート</p>
+        <p class="text-sm font-medium text-gray-600 mt-0.5">2026年4月27日（月）AM 7:00</p>
+      </div>
+    </div>
+
+    <!-- ===== 月次タブ ===== -->
+    <div id="pane-monthly" class="hidden flex-1 overflow-y-auto px-4 py-4 space-y-4">
+
+      <!-- 期間バッジ -->
+      <div class="flex items-center justify-between">
+        <div class="inline-flex items-center gap-2 bg-indigo-50 rounded-lg px-3 py-1.5">
+          <svg class="w-3.5 h-3.5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+          </svg>
+          <span class="text-xs text-indigo-600 font-medium">2026年3月1日 〜 3月31日</span>
+        </div>
+        <span class="text-xs text-gray-400">自動生成</span>
+      </div>
+
+      <!-- 週次3観点（折りたたみ） -->
+      <div class="rounded-2xl border border-gray-100 overflow-hidden">
+        <button onclick="toggleSection('monthly-weekly')" class="w-full flex items-center justify-between px-4 py-3 bg-gray-50 text-left">
+          <span class="text-sm font-semibold text-gray-700">週次観点（3項目）</span>
+          <svg id="monthly-weekly-icon" class="w-4 h-4 text-gray-400 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+          </svg>
+        </button>
+        <div id="monthly-weekly" class="hidden px-4 py-3 space-y-2 border-t border-gray-100">
+          <div class="flex items-center gap-2">
+            <span>📖</span><p class="text-sm text-gray-600">自動回顧録 — 3月は AI 学習と副業模索の月でした…</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <span>🎓</span><p class="text-sm text-gray-600">学習フィルター — 主要テーマ: AI/ML、起業、財務</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <span>💭</span><p class="text-sm text-gray-600">メンタルトリガー — 全体的に安定。週末の記録率が高い</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- AI コーチング -->
+      <div class="rounded-2xl border border-gray-100 overflow-hidden">
+        <div class="flex items-center gap-2 px-4 py-3 bg-green-50 border-b border-green-100">
+          <span class="text-lg">🤝</span>
+          <h2 class="text-sm font-semibold text-green-800">AI コーチング</h2>
+        </div>
+        <div class="px-4 py-3 space-y-3">
+          <div class="flex items-start gap-3">
+            <span class="flex-shrink-0 w-5 h-5 bg-green-100 text-green-600 rounded-full flex items-center justify-center text-xs font-bold">1</span>
+            <p class="text-sm text-gray-700 leading-relaxed">AI/ML の理論学習が充実しています。次のステップとして、小さなプロダクトを実際に作ることで実践力を高めることを推奨します。</p>
+          </div>
+          <div class="flex items-start gap-3">
+            <span class="flex-shrink-0 w-5 h-5 bg-green-100 text-green-600 rounded-full flex items-center justify-center text-xs font-bold">2</span>
+            <p class="text-sm text-gray-700 leading-relaxed">音声日記の記録頻度が低い日（週2〜3日程度）が続いています。毎朝5分の習慣化が継続的な自己分析の精度を上げます。</p>
+          </div>
+          <div class="flex items-start gap-3">
+            <span class="flex-shrink-0 w-5 h-5 bg-green-100 text-green-600 rounded-full flex items-center justify-center text-xs font-bold">3</span>
+            <p class="text-sm text-gray-700 leading-relaxed">財務・起業への関心が行動シグナルから見られます。学習を具体的なビジネス計画の検討につなげてみてはいかがでしょうか。</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ビジネスアイデア提案 -->
+      <div class="rounded-2xl border border-gray-100 overflow-hidden">
+        <div class="flex items-center gap-2 px-4 py-3 bg-rose-50 border-b border-rose-100">
+          <span class="text-lg">💡</span>
+          <h2 class="text-sm font-semibold text-rose-800">ビジネスアイデア提案</h2>
+        </div>
+        <div class="px-4 py-4 space-y-3">
+
+          <!-- アイデア1 -->
+          <div class="rounded-xl border border-rose-100 overflow-hidden">
+            <div class="flex items-center justify-between px-4 py-2.5 bg-rose-50">
+              <h3 class="text-sm font-semibold text-gray-800">AI 学習進捗トラッカー SaaS</h3>
+              <span class="text-xs bg-rose-200 text-rose-700 px-2 py-0.5 rounded-full font-medium">新規</span>
+            </div>
+            <div class="px-4 py-3 space-y-2">
+              <p class="text-xs text-gray-600 leading-relaxed"><span class="font-medium text-gray-700">概要:</span> AI/ML 学習者向けに、YouTube 視聴シグナルと日記から学習の深さと広がりを可視化するツール。</p>
+              <p class="text-xs text-gray-600 leading-relaxed"><span class="font-medium text-gray-700">実現ヒント:</span> まずはこのアプリ自体のデータを使ったプロトタイプで検証できる。MVP 工数は小さい。</p>
+            </div>
+          </div>
+
+          <!-- アイデア2 -->
+          <div class="rounded-xl border border-gray-100 overflow-hidden">
+            <div class="flex items-center justify-between px-4 py-2.5 bg-gray-50">
+              <h3 class="text-sm font-semibold text-gray-800">個人向け AI 財務コーチ</h3>
+              <span class="text-xs bg-gray-200 text-gray-600 px-2 py-0.5 rounded-full font-medium">継続</span>
+            </div>
+            <div class="px-4 py-3 space-y-2">
+              <p class="text-xs text-gray-600 leading-relaxed"><span class="font-medium text-gray-700">概要:</span> 音声メモと YouTube 学習履歴から財務目標を逆算し、週次で行動提案を行うコーチングサービス。</p>
+              <p class="text-xs text-gray-600 leading-relaxed"><span class="font-medium text-gray-700">実現ヒント:</span> Claude API をバックエンドに持つ LINE Bot からスタートできる。</p>
+            </div>
+          </div>
+
+          <!-- アイデア3 -->
+          <div class="rounded-xl border border-gray-100 overflow-hidden">
+            <div class="flex items-center justify-between px-4 py-2.5 bg-gray-50">
+              <h3 class="text-sm font-semibold text-gray-800">技術学習動画キュレーション</h3>
+              <span class="text-xs bg-gray-200 text-gray-600 px-2 py-0.5 rounded-full font-medium">継続</span>
+            </div>
+            <div class="px-4 py-3 space-y-2">
+              <p class="text-xs text-gray-600 leading-relaxed"><span class="font-medium text-gray-700">概要:</span> 個人の学習パターンを分析し「次に見るべき動画」をパーソナライズ推薦するニュースレター。</p>
+              <p class="text-xs text-gray-600 leading-relaxed"><span class="font-medium text-gray-700">実現ヒント:</span> YouTube Data API + Claude API の組み合わせで実現可能。週次配信から始める。</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 注記 -->
+        <div class="mx-4 mb-4 flex items-start gap-2 bg-amber-50 rounded-xl px-3 py-2.5 border border-amber-100">
+          <svg class="w-4 h-4 text-amber-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+          </svg>
+          <p class="text-xs text-amber-700">これは可能性の提示です。実在のビジネス・プロジェクトを推奨するものではありません。</p>
+        </div>
+      </div>
+
+      <!-- 次回レポート予告 -->
+      <div class="rounded-xl bg-gray-50 border border-gray-100 px-4 py-3 text-center">
+        <p class="text-xs text-gray-400">次回月次レポート</p>
+        <p class="text-sm font-medium text-gray-600 mt-0.5">2026年5月1日（金）AM 7:00</p>
+      </div>
+    </div>
+
+    <!-- ボトムナビ -->
+    <nav class="border-t border-gray-100 bg-white flex">
+      <a href="#" class="flex-1 flex flex-col items-center py-2 text-gray-400">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+        </svg>
+        <span class="text-xs mt-0.5">Home</span>
+      </a>
+      <a href="#" class="flex-1 flex flex-col items-center py-2 text-gray-400">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"/>
+        </svg>
+        <span class="text-xs mt-0.5">Diary</span>
+      </a>
+      <a href="#" class="flex-1 flex flex-col items-center py-2 text-indigo-600">
+        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4zm2.5 2.1h-15V5h15v14.1zm0-16.1h-15c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h15c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/>
+        </svg>
+        <span class="text-xs mt-0.5 font-medium">Analysis</span>
+      </a>
+      <a href="#" class="flex-1 flex flex-col items-center py-2 text-gray-400">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+        </svg>
+        <span class="text-xs mt-0.5">Settings</span>
+      </a>
+    </nav>
+  </div>
+
+  <script>
+    function setTab(tab) {
+      ['weekly','monthly'].forEach(t => {
+        document.getElementById('pane-' + t).classList.toggle('hidden', t !== tab);
+        const btn = document.getElementById('tab-' + t);
+        if (t === tab) {
+          btn.classList.add('bg-white','text-gray-900','shadow-sm');
+          btn.classList.remove('text-gray-500');
+        } else {
+          btn.classList.remove('bg-white','text-gray-900','shadow-sm');
+          btn.classList.add('text-gray-500');
+        }
+      });
+    }
+    function toggleExpand(btn) {
+      const next = btn.nextElementSibling;
+      const isHidden = next.classList.contains('hidden');
+      next.classList.toggle('hidden', !isHidden);
+      btn.textContent = isHidden ? '折りたたむ ↑' : 'もっと見る ↓';
+    }
+    function toggleSection(id) {
+      const el = document.getElementById(id);
+      const icon = document.getElementById(id + '-icon');
+      const hidden = el.classList.toggle('hidden');
+      icon.style.transform = hidden ? '' : 'rotate(180deg)';
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard — 日次ログ</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 min-h-screen">
+
+  <div class="max-w-sm mx-auto bg-white min-h-screen flex flex-col shadow-xl">
+
+    <!-- ヘッダー -->
+    <header class="flex items-center justify-between px-4 py-3 border-b border-gray-100 bg-white sticky top-0 z-10">
+      <h1 class="text-base font-semibold text-gray-900">Dashboard</h1>
+      <button class="text-xs text-indigo-600 font-medium px-3 py-1.5 bg-indigo-50 rounded-lg">
+        今日 +
+      </button>
+    </header>
+
+    <!-- ビュー切り替え（プレビュー用） -->
+    <div class="px-4 pt-3 pb-1 flex gap-2 text-xs">
+      <span class="px-2 py-1 bg-indigo-100 rounded text-indigo-600 font-medium cursor-pointer" onclick="showView('list')">一覧</span>
+      <span class="px-2 py-1 bg-gray-200 rounded text-gray-600 font-medium cursor-pointer" onclick="showView('detail')">詳細</span>
+    </div>
+
+    <!-- ===== 一覧ビュー ===== -->
+    <div id="view-list" class="flex-1 overflow-y-auto px-4 py-3 space-y-3">
+
+      <!-- 今日のカード -->
+      <div onclick="showView('detail')" class="rounded-2xl border border-indigo-100 bg-indigo-50 p-4 cursor-pointer hover:shadow-sm transition-shadow">
+        <div class="flex items-center justify-between mb-3">
+          <div>
+            <p class="text-sm font-semibold text-gray-900">2026年4月18日（土）</p>
+            <span class="text-xs text-indigo-600 font-medium">今日</span>
+          </div>
+          <svg class="w-5 h-5 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+          </svg>
+        </div>
+        <div class="flex gap-4">
+          <div class="flex items-center gap-1.5 text-sm text-gray-600">
+            <svg class="w-4 h-4 text-indigo-400" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/>
+            </svg>
+            <span class="font-medium">2</span>
+            <span class="text-gray-400 text-xs">音声日記</span>
+          </div>
+          <div class="flex items-center gap-1.5 text-sm text-gray-600">
+            <svg class="w-4 h-4 text-red-400" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M23.495 6.205a3.007 3.007 0 00-2.088-2.088C19.537 3.616 12 3.616 12 3.616s-7.507-.01-9.396.501A3.007 3.007 0 00.527 6.205a31.247 31.247 0 00-.522 5.805 31.247 31.247 0 00.522 5.783 3.007 3.007 0 002.088 2.088c1.868.502 9.396.502 9.396.502s7.506 0 9.396-.502a3.007 3.007 0 002.088-2.088 31.247 31.247 0 00.5-5.783 31.247 31.247 0 00-.5-5.805zM9.609 15.601V8.408l6.264 3.602z"/>
+            </svg>
+            <span class="font-medium">14</span>
+            <span class="text-gray-400 text-xs">行動シグナル</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 昨日のカード -->
+      <div onclick="showView('detail')" class="rounded-2xl border border-gray-100 bg-white p-4 cursor-pointer hover:shadow-sm transition-shadow">
+        <div class="flex items-center justify-between mb-3">
+          <p class="text-sm font-semibold text-gray-900">2026年4月17日（金）</p>
+          <svg class="w-5 h-5 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+          </svg>
+        </div>
+        <div class="flex gap-4">
+          <div class="flex items-center gap-1.5 text-sm text-gray-600">
+            <svg class="w-4 h-4 text-indigo-400" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/>
+            </svg>
+            <span class="font-medium">1</span>
+            <span class="text-gray-400 text-xs">音声日記</span>
+          </div>
+          <div class="flex items-center gap-1.5 text-sm text-gray-600">
+            <svg class="w-4 h-4 text-red-400" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M23.495 6.205a3.007 3.007 0 00-2.088-2.088C19.537 3.616 12 3.616 12 3.616s-7.507-.01-9.396.501A3.007 3.007 0 00.527 6.205a31.247 31.247 0 00-.522 5.805 31.247 31.247 0 00.522 5.783 3.007 3.007 0 002.088 2.088c1.868.502 9.396.502 9.396.502s7.506 0 9.396-.502a3.007 3.007 0 002.088-2.088 31.247 31.247 0 00.5-5.783 31.247 31.247 0 00-.5-5.805zM9.609 15.601V8.408l6.264 3.602z"/>
+            </svg>
+            <span class="font-medium">8</span>
+            <span class="text-gray-400 text-xs">行動シグナル</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 記録なしの日 -->
+      <div class="rounded-2xl border border-gray-100 bg-white p-4">
+        <div class="flex items-center justify-between">
+          <p class="text-sm font-semibold text-gray-400">2026年4月16日（木）</p>
+        </div>
+        <p class="text-xs text-gray-300 mt-2">記録なし</p>
+      </div>
+
+      <!-- 過去カード -->
+      <div onclick="showView('detail')" class="rounded-2xl border border-gray-100 bg-white p-4 cursor-pointer hover:shadow-sm transition-shadow">
+        <div class="flex items-center justify-between mb-3">
+          <p class="text-sm font-semibold text-gray-900">2026年4月15日（水）</p>
+          <svg class="w-5 h-5 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+          </svg>
+        </div>
+        <div class="flex gap-4">
+          <div class="flex items-center gap-1.5 text-sm text-gray-600">
+            <svg class="w-4 h-4 text-indigo-400" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/>
+            </svg>
+            <span class="font-medium">3</span>
+            <span class="text-gray-400 text-xs">音声日記</span>
+          </div>
+          <div class="flex items-center gap-1.5 text-sm text-gray-600">
+            <svg class="w-4 h-4 text-red-400" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M23.495 6.205a3.007 3.007 0 00-2.088-2.088C19.537 3.616 12 3.616 12 3.616s-7.507-.01-9.396.501A3.007 3.007 0 00.527 6.205a31.247 31.247 0 00-.522 5.805 31.247 31.247 0 00.522 5.783 3.007 3.007 0 002.088 2.088c1.868.502 9.396.502 9.396.502s7.506 0 9.396-.502a3.007 3.007 0 002.088-2.088 31.247 31.247 0 00.5-5.783 31.247 31.247 0 00-.5-5.805zM9.609 15.601V8.408l6.264 3.602z"/>
+            </svg>
+            <span class="font-medium">21</span>
+            <span class="text-gray-400 text-xs">行動シグナル</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== 詳細ビュー ===== -->
+    <div id="view-detail" class="hidden flex-1 overflow-y-auto">
+
+      <!-- 詳細ヘッダー -->
+      <div class="flex items-center gap-2 px-4 py-3 border-b border-gray-100">
+        <button onclick="showView('list')" class="p-1 -ml-1 text-gray-400">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+          </svg>
+        </button>
+        <p class="text-sm font-semibold text-gray-800">2026年4月18日（土）</p>
+      </div>
+
+      <div class="px-4 py-4 space-y-5">
+
+        <!-- 音声日記セクション -->
+        <section>
+          <div class="flex items-center gap-2 mb-3">
+            <svg class="w-4 h-4 text-indigo-500" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/>
+            </svg>
+            <h2 class="text-sm font-semibold text-gray-700">音声日記</h2>
+            <span class="text-xs text-gray-400">2件</span>
+          </div>
+          <div class="space-y-2">
+            <div class="bg-indigo-50 rounded-xl px-4 py-3 border border-indigo-100">
+              <p class="text-xs text-indigo-400 mb-1">08:32</p>
+              <p class="text-sm text-gray-700 leading-relaxed">今日は朝から調子が良くて、昨日読んでいた機械学習の本の内容が頭の中でつながった感じがした。特にアテンション機構のあたりが面白くて、もう少し深掘りしてみようと思う。</p>
+            </div>
+            <div class="bg-indigo-50 rounded-xl px-4 py-3 border border-indigo-100">
+              <p class="text-xs text-indigo-400 mb-1">12:10</p>
+              <p class="text-sm text-gray-700 leading-relaxed">ランチ中に気づいたこと。最近 YouTube で見るのがほとんど技術系になってきている。以前はエンタメも多かったのに、自然と興味が絞られてきた感じがする。</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- YouTube 行動シグナルセクション -->
+        <section>
+          <div class="flex items-center gap-2 mb-3">
+            <svg class="w-4 h-4 text-red-500" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M23.495 6.205a3.007 3.007 0 00-2.088-2.088C19.537 3.616 12 3.616 12 3.616s-7.507-.01-9.396.501A3.007 3.007 0 00.527 6.205a31.247 31.247 0 00-.522 5.805 31.247 31.247 0 00.522 5.783 3.007 3.007 0 002.088 2.088c1.868.502 9.396.502 9.396.502s7.506 0 9.396-.502a3.007 3.007 0 002.088-2.088 31.247 31.247 0 00.5-5.783 31.247 31.247 0 00-.5-5.805zM9.609 15.601V8.408l6.264 3.602z"/>
+            </svg>
+            <h2 class="text-sm font-semibold text-gray-700">YouTube 行動シグナル</h2>
+            <span class="text-xs text-gray-400">14件</span>
+          </div>
+          <div class="space-y-2">
+
+            <div class="flex items-start gap-3 bg-gray-50 rounded-xl px-3 py-3 border border-gray-100">
+              <span class="text-base mt-0.5">👍</span>
+              <div class="flex-1 min-w-0">
+                <p class="text-sm font-medium text-gray-800 truncate">Transformerの仕組みを完全に理解する【2024年版】</p>
+                <p class="text-xs text-gray-400 mt-0.5">3Blue1Brown · 高評価</p>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-3 bg-gray-50 rounded-xl px-3 py-3 border border-gray-100">
+              <span class="text-base mt-0.5">➕</span>
+              <div class="flex-1 min-w-0">
+                <p class="text-sm font-medium text-gray-800 truncate">Python で作る RAG システム入門</p>
+                <p class="text-xs text-gray-400 mt-0.5">AI Tutorial JP · プレイリスト追加</p>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-3 bg-gray-50 rounded-xl px-3 py-3 border border-gray-100">
+              <span class="text-base mt-0.5">❤️</span>
+              <div class="flex-1 min-w-0">
+                <p class="text-sm font-medium text-gray-800 truncate">起業家のための財務諸表入門 第3回</p>
+                <p class="text-xs text-gray-400 mt-0.5">FinTech Academy · 高評価動画</p>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-3 bg-gray-50 rounded-xl px-3 py-3 border border-gray-100">
+              <span class="text-base mt-0.5">🔔</span>
+              <div class="flex-1 min-w-0">
+                <p class="text-sm font-medium text-gray-800 truncate">Lex Fridman Podcast</p>
+                <p class="text-xs text-gray-400 mt-0.5">チャンネル登録</p>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-3 bg-gray-50 rounded-xl px-3 py-3 border border-gray-100">
+              <span class="text-base mt-0.5">👍</span>
+              <div class="flex-1 min-w-0">
+                <p class="text-sm font-medium text-gray-800 truncate">ゼロから始めるアルゴリズム設計 — グラフ理論編</p>
+                <p class="text-xs text-gray-400 mt-0.5">CS Channel · 高評価</p>
+              </div>
+            </div>
+
+            <button class="w-full text-center text-xs text-indigo-500 py-2">
+              残り9件を表示
+            </button>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <!-- ボトムナビ -->
+    <nav class="border-t border-gray-100 bg-white flex">
+      <a href="#" class="flex-1 flex flex-col items-center py-2 text-indigo-600">
+        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+        </svg>
+        <span class="text-xs mt-0.5 font-medium">Home</span>
+      </a>
+      <a href="#" class="flex-1 flex flex-col items-center py-2 text-gray-400">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"/>
+        </svg>
+        <span class="text-xs mt-0.5">Diary</span>
+      </a>
+      <a href="#" class="flex-1 flex flex-col items-center py-2 text-gray-400">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+        </svg>
+        <span class="text-xs mt-0.5">Analysis</span>
+      </a>
+      <a href="#" class="flex-1 flex flex-col items-center py-2 text-gray-400">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+        </svg>
+        <span class="text-xs mt-0.5">Settings</span>
+      </a>
+    </nav>
+  </div>
+
+  <script>
+    function showView(view) {
+      document.getElementById('view-list').classList.toggle('hidden', view !== 'list');
+      document.getElementById('view-detail').classList.toggle('hidden', view !== 'detail');
+    }
+  </script>
+</body>
+</html>

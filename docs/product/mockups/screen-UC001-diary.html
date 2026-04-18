@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diary — 音声日記</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @keyframes pulse-ring {
+      0% { transform: scale(1); opacity: 0.8; }
+      100% { transform: scale(1.5); opacity: 0; }
+    }
+    @keyframes wave {
+      0%, 100% { height: 6px; }
+      50% { height: 24px; }
+    }
+    .pulse-ring {
+      animation: pulse-ring 1.2s ease-out infinite;
+    }
+    .wave-bar {
+      animation: wave 0.8s ease-in-out infinite;
+    }
+    .wave-bar:nth-child(2) { animation-delay: 0.1s; }
+    .wave-bar:nth-child(3) { animation-delay: 0.2s; }
+    .wave-bar:nth-child(4) { animation-delay: 0.3s; }
+    .wave-bar:nth-child(5) { animation-delay: 0.2s; }
+    .wave-bar:nth-child(6) { animation-delay: 0.1s; }
+    .wave-bar:nth-child(7) { animation-delay: 0.05s; }
+  </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+
+  <!-- スマートフォンフレーム -->
+  <div class="max-w-sm mx-auto bg-white min-h-screen flex flex-col shadow-xl">
+
+    <!-- ヘッダー -->
+    <header class="flex items-center justify-between px-4 py-3 border-b border-gray-100 bg-white sticky top-0 z-10">
+      <button class="p-2 -ml-2 text-gray-500">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+        </svg>
+      </button>
+      <h1 class="text-base font-semibold text-gray-900">Diary</h1>
+      <button class="p-2 -mr-2 text-gray-500">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+        </svg>
+      </button>
+    </header>
+
+    <div class="flex-1 overflow-y-auto">
+
+      <!-- 日付セレクター -->
+      <div class="mx-4 mt-4">
+        <button class="w-full flex items-center justify-between px-4 py-3 bg-indigo-50 rounded-xl border border-indigo-100">
+          <span class="text-sm text-indigo-600 font-medium">2026年4月18日（土）今日</span>
+          <svg class="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- 録音セクション -->
+      <div class="flex flex-col items-center py-8 px-4">
+
+        <!-- 状態切り替えタブ（プレビュー用） -->
+        <div class="flex gap-2 mb-6 text-xs">
+          <span class="px-2 py-1 bg-gray-200 rounded text-gray-600 font-medium cursor-pointer" onclick="setMode('idle')">待機</span>
+          <span class="px-2 py-1 bg-red-100 rounded text-red-600 font-medium cursor-pointer" onclick="setMode('recording')">録音中</span>
+          <span class="px-2 py-1 bg-yellow-100 rounded text-yellow-600 font-medium cursor-pointer" onclick="setMode('processing')">処理中</span>
+          <span class="px-2 py-1 bg-green-100 rounded text-green-600 font-medium cursor-pointer" onclick="setMode('done')">完了</span>
+        </div>
+
+        <!-- 録音ボタン: idle -->
+        <div id="btn-idle" class="relative flex items-center justify-center">
+          <div class="w-24 h-24 rounded-full bg-indigo-600 flex items-center justify-center shadow-lg cursor-pointer hover:bg-indigo-700 transition-colors">
+            <svg class="w-10 h-10 text-white" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.49 6-3.31 6-6.72h-1.7z"/>
+            </svg>
+          </div>
+          <p class="absolute -bottom-8 text-sm text-gray-500 whitespace-nowrap">タップして録音開始</p>
+        </div>
+
+        <!-- 録音ボタン: recording（デフォルト非表示） -->
+        <div id="btn-recording" class="relative hidden flex-col items-center">
+          <div class="relative flex items-center justify-center">
+            <div class="absolute w-24 h-24 rounded-full bg-red-400 opacity-30 pulse-ring"></div>
+            <div class="w-24 h-24 rounded-full bg-red-500 flex items-center justify-center shadow-lg cursor-pointer">
+              <!-- 波形アニメーション -->
+              <div class="flex items-center gap-0.5">
+                <div class="wave-bar w-1 bg-white rounded-full"></div>
+                <div class="wave-bar w-1 bg-white rounded-full"></div>
+                <div class="wave-bar w-1 bg-white rounded-full"></div>
+                <div class="wave-bar w-1 bg-white rounded-full"></div>
+                <div class="wave-bar w-1 bg-white rounded-full"></div>
+                <div class="wave-bar w-1 bg-white rounded-full"></div>
+                <div class="wave-bar w-1 bg-white rounded-full"></div>
+              </div>
+            </div>
+          </div>
+          <p class="mt-10 text-sm text-red-500 font-medium">0:23 — タップして停止</p>
+        </div>
+
+        <!-- 録音ボタン: processing -->
+        <div id="btn-processing" class="hidden flex-col items-center">
+          <div class="w-24 h-24 rounded-full bg-gray-200 flex items-center justify-center shadow-inner">
+            <svg class="w-8 h-8 text-gray-400 animate-spin" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
+            </svg>
+          </div>
+          <p class="mt-3 text-sm text-gray-400">文字起こし中…</p>
+        </div>
+
+        <!-- 録音ボタン: done -->
+        <div id="btn-done" class="hidden flex-col items-center">
+          <div class="w-24 h-24 rounded-full bg-green-500 flex items-center justify-center shadow-lg">
+            <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/>
+            </svg>
+          </div>
+          <p class="mt-3 text-sm text-green-600 font-medium">文字起こし完了</p>
+        </div>
+
+      </div>
+
+      <!-- 文字起こし結果エリア（done状態で表示） -->
+      <div id="transcription-area" class="hidden px-4 pb-4">
+        <div class="mb-2 flex items-center justify-between">
+          <label class="text-xs font-medium text-gray-500 uppercase tracking-wide">文字起こし結果</label>
+          <span class="text-xs text-gray-400">編集可</span>
+        </div>
+        <textarea
+          class="w-full min-h-32 px-3 py-3 text-sm text-gray-800 bg-gray-50 border border-gray-200 rounded-xl resize-none focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:border-transparent"
+          placeholder="文字起こし結果がここに表示されます"
+        >今日は朝から調子が良くて、昨日読んでいた機械学習の本の内容が頭の中でつながった感じがした。特にアテンション機構のあたりが面白くて、もう少し深掘りしてみようと思う。</textarea>
+        <button class="mt-3 w-full py-3 bg-indigo-600 text-white text-sm font-semibold rounded-xl hover:bg-indigo-700 transition-colors">
+          保存する
+        </button>
+      </div>
+
+      <!-- 区切り -->
+      <div class="mx-4 border-t border-gray-100 my-2"></div>
+
+      <!-- 今日の記録一覧 -->
+      <div class="px-4 pb-6">
+        <h2 class="text-xs font-medium text-gray-500 uppercase tracking-wide mb-3">今日の記録</h2>
+        <div class="space-y-2">
+          <div class="bg-gray-50 rounded-xl px-4 py-3 border border-gray-100">
+            <div class="flex items-center gap-2 mb-1">
+              <svg class="w-3.5 h-3.5 text-indigo-400" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/>
+              </svg>
+              <span class="text-xs text-gray-400">08:32</span>
+            </div>
+            <p class="text-sm text-gray-700 line-clamp-2">今日は朝から調子が良くて、昨日読んでいた機械学習の本の内容が頭の中でつながった感じがした…</p>
+          </div>
+          <div class="bg-gray-50 rounded-xl px-4 py-3 border border-gray-100">
+            <div class="flex items-center gap-2 mb-1">
+              <svg class="w-3.5 h-3.5 text-indigo-400" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/>
+              </svg>
+              <span class="text-xs text-gray-400">12:10</span>
+            </div>
+            <p class="text-sm text-gray-700 line-clamp-2">ランチ中に気づいたこと。最近 YouTube で見るのがほとんど技術系になってきている。以前はエンタメも多かったのに…</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ボトムナビ -->
+    <nav class="border-t border-gray-100 bg-white flex">
+      <a href="#" class="flex-1 flex flex-col items-center py-2 text-gray-400">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+        </svg>
+        <span class="text-xs mt-0.5">Home</span>
+      </a>
+      <a href="#" class="flex-1 flex flex-col items-center py-2 text-indigo-600">
+        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.49 6-3.31 6-6.72h-1.7z"/>
+        </svg>
+        <span class="text-xs mt-0.5 font-medium">Diary</span>
+      </a>
+      <a href="#" class="flex-1 flex flex-col items-center py-2 text-gray-400">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+        </svg>
+        <span class="text-xs mt-0.5">Analysis</span>
+      </a>
+      <a href="#" class="flex-1 flex flex-col items-center py-2 text-gray-400">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+        </svg>
+        <span class="text-xs mt-0.5">Settings</span>
+      </a>
+    </nav>
+  </div>
+
+  <script>
+    function setMode(mode) {
+      ['idle','recording','processing','done'].forEach(m => {
+        const el = document.getElementById('btn-' + m);
+        if (el) { m === 'idle' ? el.classList.remove('hidden') : el.classList.add('hidden'); el.classList.add('hidden'); }
+      });
+      const target = document.getElementById('btn-' + mode);
+      if (target) { target.classList.remove('hidden'); target.classList.add('flex'); }
+      const ta = document.getElementById('transcription-area');
+      mode === 'done' ? ta.classList.remove('hidden') : ta.classList.add('hidden');
+    }
+    // 初期表示: idle
+    setMode('idle');
+  </script>
+</body>
+</html>

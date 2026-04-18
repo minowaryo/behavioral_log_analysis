@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Settings — YouTube 連携</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 min-h-screen">
+
+  <div class="max-w-sm mx-auto bg-white min-h-screen flex flex-col shadow-xl">
+
+    <!-- ヘッダー -->
+    <header class="flex items-center justify-between px-4 py-3 border-b border-gray-100 bg-white sticky top-0 z-10">
+      <button class="p-2 -ml-2 text-gray-500">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+        </svg>
+      </button>
+      <h1 class="text-base font-semibold text-gray-900">Settings</h1>
+      <div class="w-9"></div>
+    </header>
+
+    <div class="flex-1 overflow-y-auto px-4 py-5 space-y-5">
+
+      <!-- 状態切り替え（プレビュー用） -->
+      <div class="flex gap-2 text-xs">
+        <span class="px-2 py-1 bg-gray-200 rounded text-gray-600 cursor-pointer font-medium" onclick="setConnected(false)">未連携</span>
+        <span class="px-2 py-1 bg-green-100 rounded text-green-600 cursor-pointer font-medium" onclick="setConnected(true)">連携済み</span>
+        <span class="px-2 py-1 bg-blue-100 rounded text-blue-600 cursor-pointer font-medium" onclick="setSyncing(true)">同期中</span>
+      </div>
+
+      <!-- YouTube 連携セクション -->
+      <section>
+        <h2 class="text-xs font-medium text-gray-500 uppercase tracking-wide mb-3">YouTube 連携</h2>
+
+        <!-- 未連携カード -->
+        <div id="card-disconnected" class="rounded-2xl border border-gray-200 p-5">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center">
+              <!-- YouTube ロゴ風 -->
+              <svg class="w-5 h-5 text-red-500" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M23.495 6.205a3.007 3.007 0 00-2.088-2.088c-1.87-.501-9.396-.501-9.396-.501s-7.507-.01-9.396.501A3.007 3.007 0 00.527 6.205a31.247 31.247 0 00-.522 5.805 31.247 31.247 0 00.522 5.783 3.007 3.007 0 002.088 2.088c1.868.502 9.396.502 9.396.502s7.506 0 9.396-.502a3.007 3.007 0 002.088-2.088 31.247 31.247 0 00.5-5.783 31.247 31.247 0 00-.5-5.805zM9.609 15.601V8.408l6.264 3.602z"/>
+              </svg>
+            </div>
+            <div>
+              <p class="text-sm font-semibold text-gray-800">YouTube</p>
+              <span class="inline-flex items-center gap-1 text-xs text-gray-400">
+                <span class="w-1.5 h-1.5 rounded-full bg-gray-300 inline-block"></span>
+                未連携
+              </span>
+            </div>
+          </div>
+          <p class="text-xs text-gray-500 mb-4">連携すると、高評価・プレイリスト・購読チャンネルなどの行動シグナルを自動収集し、AI 分析に活用できます。</p>
+          <button class="w-full py-3 bg-red-500 text-white text-sm font-semibold rounded-xl hover:bg-red-600 transition-colors flex items-center justify-center gap-2">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M23.495 6.205a3.007 3.007 0 00-2.088-2.088c-1.87-.501-9.396-.501-9.396-.501s-7.507-.01-9.396.501A3.007 3.007 0 00.527 6.205a31.247 31.247 0 00-.522 5.805 31.247 31.247 0 00.522 5.783 3.007 3.007 0 002.088 2.088c1.868.502 9.396.502 9.396.502s7.506 0 9.396-.502a3.007 3.007 0 002.088-2.088 31.247 31.247 0 00.5-5.783 31.247 31.247 0 00-.5-5.805zM9.609 15.601V8.408l6.264 3.602z"/>
+            </svg>
+            YouTube と連携する
+          </button>
+        </div>
+
+        <!-- 連携済みカード -->
+        <div id="card-connected" class="hidden rounded-2xl border border-green-200 bg-green-50 p-5">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center">
+              <svg class="w-5 h-5 text-red-500" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M23.495 6.205a3.007 3.007 0 00-2.088-2.088c-1.87-.501-9.396-.501-9.396-.501s-7.507-.01-9.396.501A3.007 3.007 0 00.527 6.205a31.247 31.247 0 00-.522 5.805 31.247 31.247 0 00.522 5.783 3.007 3.007 0 002.088 2.088c1.868.502 9.396.502 9.396.502s7.506 0 9.396-.502a3.007 3.007 0 002.088-2.088 31.247 31.247 0 00.5-5.783 31.247 31.247 0 00-.5-5.805zM9.609 15.601V8.408l6.264 3.602z"/>
+              </svg>
+            </div>
+            <div>
+              <p class="text-sm font-semibold text-gray-800">YouTube</p>
+              <span class="inline-flex items-center gap-1 text-xs text-green-600 font-medium">
+                <span class="w-1.5 h-1.5 rounded-full bg-green-500 inline-block"></span>
+                連携中
+              </span>
+            </div>
+          </div>
+
+          <!-- 統計 -->
+          <div class="grid grid-cols-2 gap-3 mb-4">
+            <div class="bg-white rounded-xl p-3 text-center border border-green-100">
+              <p class="text-lg font-bold text-gray-800">1,234</p>
+              <p class="text-xs text-gray-500">取得シグナル数</p>
+            </div>
+            <div class="bg-white rounded-xl p-3 text-center border border-green-100">
+              <p class="text-sm font-bold text-gray-800">04/18 07:00</p>
+              <p class="text-xs text-gray-500">最終同期日時</p>
+            </div>
+          </div>
+
+          <!-- 同期ボタン（通常） -->
+          <button id="btn-sync-normal" class="w-full py-3 bg-indigo-600 text-white text-sm font-semibold rounded-xl hover:bg-indigo-700 transition-colors mb-3">
+            今すぐ同期
+          </button>
+
+          <!-- 同期ボタン（同期中） -->
+          <button id="btn-sync-loading" class="hidden w-full py-3 bg-indigo-400 text-white text-sm font-semibold rounded-xl mb-3 flex items-center justify-center gap-2 cursor-not-allowed">
+            <svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
+            </svg>
+            同期中…
+          </button>
+
+          <button onclick="showDisconnectConfirm()" class="w-full py-2.5 text-sm text-gray-500 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors">
+            連携を解除する
+          </button>
+        </div>
+      </section>
+
+      <!-- 取得シグナルの種類（説明） -->
+      <section>
+        <h2 class="text-xs font-medium text-gray-500 uppercase tracking-wide mb-3">取得できる行動シグナル</h2>
+        <div class="space-y-2">
+          <div class="flex items-start gap-3 px-4 py-3 bg-gray-50 rounded-xl">
+            <span class="text-lg">👍</span>
+            <div>
+              <p class="text-sm font-medium text-gray-700">高評価動画</p>
+              <p class="text-xs text-gray-400">明示的に高評価した動画を収集</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-3 px-4 py-3 bg-gray-50 rounded-xl">
+            <span class="text-lg">➕</span>
+            <div>
+              <p class="text-sm font-medium text-gray-700">プレイリスト追加</p>
+              <p class="text-xs text-gray-400">自分のプレイリストに追加した動画</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-3 px-4 py-3 bg-gray-50 rounded-xl">
+            <span class="text-lg">🔔</span>
+            <div>
+              <p class="text-sm font-medium text-gray-700">チャンネル登録</p>
+              <p class="text-xs text-gray-400">購読中のチャンネル一覧</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-3 px-4 py-3 bg-gray-50 rounded-xl">
+            <span class="text-lg">⚡</span>
+            <div>
+              <p class="text-sm font-medium text-gray-700">アクティビティ</p>
+              <p class="text-xs text-gray-400">直近のアクティビティイベント</p>
+            </div>
+          </div>
+        </div>
+        <p class="mt-3 text-xs text-gray-400 px-1">
+          ※ 完全な視聴履歴の自動取得は YouTube API の制約上、対象外です。
+        </p>
+      </section>
+    </div>
+
+    <!-- 連携解除確認ダイアログ -->
+    <div id="disconnect-modal" class="hidden fixed inset-0 bg-black bg-opacity-40 flex items-end z-50">
+      <div class="w-full max-w-sm mx-auto bg-white rounded-t-2xl p-6">
+        <h3 class="text-base font-semibold text-gray-900 mb-2">YouTube 連携を解除しますか？</h3>
+        <p class="text-sm text-gray-500 mb-1">連携トークンを削除し、新規シグナルの取得を停止します。</p>
+        <p class="text-sm text-indigo-600 font-medium mb-5">✓ これまでに取得したシグナルデータは保持されます。</p>
+        <div class="space-y-2">
+          <button onclick="hideDisconnectConfirm()" class="w-full py-3 bg-red-500 text-white text-sm font-semibold rounded-xl hover:bg-red-600">
+            解除する
+          </button>
+          <button onclick="hideDisconnectConfirm()" class="w-full py-3 text-gray-600 text-sm font-semibold rounded-xl hover:bg-gray-50">
+            キャンセル
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ボトムナビ -->
+    <nav class="border-t border-gray-100 bg-white flex">
+      <a href="#" class="flex-1 flex flex-col items-center py-2 text-gray-400">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+        </svg>
+        <span class="text-xs mt-0.5">Home</span>
+      </a>
+      <a href="#" class="flex-1 flex flex-col items-center py-2 text-gray-400">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"/>
+        </svg>
+        <span class="text-xs mt-0.5">Diary</span>
+      </a>
+      <a href="#" class="flex-1 flex flex-col items-center py-2 text-gray-400">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+        </svg>
+        <span class="text-xs mt-0.5">Analysis</span>
+      </a>
+      <a href="#" class="flex-1 flex flex-col items-center py-2 text-indigo-600">
+        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/>
+        </svg>
+        <span class="text-xs mt-0.5 font-medium">Settings</span>
+      </a>
+    </nav>
+  </div>
+
+  <script>
+    function setConnected(connected) {
+      document.getElementById('card-disconnected').classList.toggle('hidden', connected);
+      document.getElementById('card-connected').classList.toggle('hidden', !connected);
+    }
+    function setSyncing(syncing) {
+      setConnected(true);
+      document.getElementById('btn-sync-normal').classList.toggle('hidden', syncing);
+      const loading = document.getElementById('btn-sync-loading');
+      syncing ? loading.classList.remove('hidden') : loading.classList.add('hidden');
+    }
+    function showDisconnectConfirm() {
+      document.getElementById('disconnect-modal').classList.remove('hidden');
+    }
+    function hideDisconnectConfirm() {
+      document.getElementById('disconnect-modal').classList.add('hidden');
+    }
+    setConnected(false);
+  </script>
+</body>
+</html>
