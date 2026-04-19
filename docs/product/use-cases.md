@@ -205,8 +205,8 @@
 | analysis_reports | AnalysisReport[] | 3観点（retrospective / learning_filter / mental_trigger）の分析結果。各レコードに analysis_type・period_start・period_end・content を保持 |
 
 #### 状態変更
-- AnalysisReport が最大3件（観点ごと）新規保存される
-- 既存レポートは上書きせず、新規レコードとして追加する
+- AnalysisReport が最大3件（観点ごと）保存される
+- 同一 `(user_id, analysis_type, period_type, period_start)` のレコードが既にある場合は `content` / `model_used` / `updated_at` を上書きする（upsert）。リトライ時の重複を防ぐ
 
 #### 業務ルール
 - 分析対象期間: 実行日の前7日間
@@ -250,8 +250,9 @@
 | analysis_reports | AnalysisReport[] | 5観点（retrospective / learning_filter / mental_trigger / ai_coaching / business_idea）の分析結果 |
 
 #### 状態変更
-- AnalysisReport が最大5件（観点ごと）新規保存される
-- Analysis 画面の「月次レポート」タブに新しいレポートが追加表示される
+- AnalysisReport が最大5件（観点ごと）保存される
+- 同一 `(user_id, analysis_type, period_type, period_start)` のレコードが既にある場合は `content` / `model_used` / `updated_at` を上書きする（upsert）。リトライ時の重複を防ぐ
+- Analysis 画面の「月次レポート」タブに最新レポートが表示される
 
 #### 業務ルール
 - YouTube 行動シグナルから推定した興味カテゴリ・日記の関心事・学習傾向の3軸を掛け合わせてビジネスアイデアを生成する
