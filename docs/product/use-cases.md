@@ -185,7 +185,7 @@
 **関連要件**: F-004, F-005, F-006, F-009
 
 #### 基本フロー
-1. Laravel スケジューラが毎週月曜日 AM 7:00 に ScheduledAnalysisJob を実行
+1. Laravel スケジューラが毎週土曜日 AM 7:00 に ScheduledAnalysisJob を実行
 2. 対象ユーザーの過去7日分のログ（VoiceDiary + YouTubeSignal）を集約
 3. Claude API に以下3観点の分析を依頼:
    - 自動回顧録（retrospective）
@@ -317,6 +317,55 @@
 #### 業務ルール
 - アイデアは実在のビジネス・プロジェクトではなく「可能性の提示」であることを UI で明示する
 - 既存のアイデア（前回分析）との差分も表示して成長を可視化する
+
+---
+
+### UC-008: PLAUD 音声メモを Zapier 経由で自動取り込みする
+
+**Actor**: システム（外部 Webhook）
+**前提条件**: PLAUD アプリと Zapier が連携済みで、Zapier Zap が本システムの Webhook エンドポイントに向いている
+**関連要件**: F-012
+
+> **注**: PLAUD はハードウェア音声レコーダー。録音 → PLAUD 側で文字起こし → Zapier トリガー発火 → 本システムの Webhook エンドポイントにテキストが POST される。音声ファイルはサーバーに保存しない。
+
+#### 基本フロー
+1. PLAUD での録音・文字起こしが完了すると Zapier トリガーが発火する
+2. Zapier が `POST /api/webhooks/zapier/plaud` に以下を送信する:
+   - 文字起こしテキスト（`transcript`）
+   - 録音日時（`recorded_at`）
+   - タイトル・メモ名（`title`、任意）
+3. システムが Webhook シークレットでリクエストを検証する
+4. 文字起こしテキストから VoiceDiary レコードを作成する（`source: plaud`）
+5. `recorded_at` の日付に対応する DailyLog が存在しなければ自動作成して紐づける
+
+#### 入力（Webhook ペイロード）
+| フィールド | 型 | 必須 | 説明 |
+|---|---|---|---|
+| transcript | string | 必須 | PLAUD が生成した文字起こしテキスト |
+| recorded_at | string (ISO8601) | 必須 | 録音日時 |
+| title | string | 任意 | PLAUD 上のメモ名 |
+
+#### 出力
+| 項目 | 型 | 説明 |
+|---|---|---|
+| voice_diary_id | integer | 作成された VoiceDiary の ID |
+
+#### 状態変更
+- VoiceDiary が `source: plaud` で作成される（`audio_path` は null）
+- 対応する DailyLog が存在しなければ自動作成される
+
+#### 業務ルール
+- Webhook シークレット（`ZAPIER_WEBHOOK_SECRET`）を `.env` で管理し、リクエストヘッダーで検証する
+- `recorded_at` が取得できない場合は受信日時を使用する
+- テキストが空の場合はスキップしてエラーを返す（400）
+- ブラウザ録音（UC-001）と併用可能。どちらも VoiceDiary として同一テーブルに保存される
+
+#### エラーケース
+| ケース | HTTPステータス | 対処 |
+|---|---|---|
+| シークレット不一致 | 401 | リクエストを拒否、ログに記録 |
+| transcript が空 | 400 | スキップ、Zapier 側にエラー返却 |
+| recorded_at のパース失敗 | - | 受信日時で代替して処理継続 |
 
 ---
 

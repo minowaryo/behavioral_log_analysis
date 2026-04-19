@@ -127,7 +127,7 @@ Then:  HTTP 403 が返却される
 ### 正常系
 
 ```
-Given: 毎週月曜日 AM 7:00 になる
+Given: 毎週土曜日 AM 7:00 になる
   And: 対象ユーザーの過去7日分の DailyLog が3日以上存在する
 When:  ScheduledAnalysisJob が実行される
 Then:  retrospective / learning_filter / mental_trigger の3観点で Claude API が呼び出される
