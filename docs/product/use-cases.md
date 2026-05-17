@@ -271,10 +271,31 @@
 2. Laravel Sanctum がセッション認証を処理
 3. 認証成功後、Dashboard にリダイレクト
 
+#### 入力
+| 項目 | 型 | 必須 | バリデーション |
+|---|---|---|---|
+| email | string | 必須 | RFC準拠のメール形式、最大255文字 |
+| password | string | 必須 | 8文字以上 |
+
+#### 出力
+| 項目 | 型 | 説明 |
+|---|---|---|
+| user_id | integer | 認証されたユーザーID |
+| redirect_to | string | 認証成功後の遷移先（Dashboard） |
+
+#### 状態変更
+- セッションが新規作成される
+- セッションCookieが HttpOnly + Secure 属性で発行される
+- 直前の匿名セッションが存在する場合はセッション固定化対策として再生成する
+
 #### 業務ルール
 - セッションは HttpOnly + Secure Cookie で管理
 - CSRF トークンを必ず検証する
 - 将来のマルチユーザー対応を見越し、全クエリに `user_id` スコープを適用する
+
+#### 権限
+- 未認証ユーザー: ログイン操作のみ実行可
+- 認証済みユーザー: 保護された画面・機能にアクセス可
 
 #### エラーケース
 | ケース | HTTPステータス | メッセージ |
@@ -311,7 +332,8 @@
 | analysis_report | AnalysisReport | type: business_idea。content は JSON 配列形式で `[{title, summary, hint}]` の3〜5件を含む |
 
 #### 状態変更
-- AnalysisReport（type: business_idea）が1件新規保存される
+- 同一 `(user_id, analysis_type, period_type, period_start)` のレコードが既にある場合は `content` / `model_used` / `updated_at` を上書きする（upsert）
+- 対象期間のレコードが存在しない場合は AnalysisReport（type: business_idea）が新規保存される
 - Analysis 画面の「アイデア」タブに新しいアイデア一覧が表示される
 
 #### 業務ルール
@@ -374,3 +396,4 @@
 | 日付 | レビュアー | 結果 | コメント |
 |---|---|---|---|
 | 2026-04-12 | - | 叩き台作成 | Gate 2 承認前。レビューを経て Gate 2 を通過すること |
+| 2026-05-17 | GitHub Copilot | 承認 | 指摘事項（UC-006粒度統一、UC-007 upsert整合、UC-008対応AC追加、未認証時挙動の明確化）反映済み |
